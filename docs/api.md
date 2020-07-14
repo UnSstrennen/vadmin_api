@@ -15,25 +15,21 @@ vadmin = VAdminAPI()
 Библиотека предусматривает авторизацию как по данным учётной записи, так и по токену, если он уже известен.
 
 ```python
-vadmin.auth(login, password)  # by login & password
-vadmin.auth(token)  # by token
+vadmin.auth_by_username(login, password)  # by login & password
+vadmin.auth_by_token(token_type, access_token)  # by token
 ```
-
-Функция `auth` возвращает `True` или `False` - успех авторизации.
 
 ## Методы API
 
 ##### `vadmin.get_load_plans(database_id)`
+Возвращает список всех [планов загрузки](#loadplan).
 
-Возвращает список всех планов загрузки.
-
-```json
-[
-  {
-    "id": 0,
-    "name": "string"
-  }
-]
+```
+[<LoadPlan name(1)>, <LoadPlan name(2)>]
 ```
 
 ##### `vadmin.get_load_plan(database_id, load_plan_id)`
+Возвращает объект [плана загрузки](#loadplan).
+
+
+## <a name="loadplan"></a>Объект плана загрузки (`LoadPlan`)
