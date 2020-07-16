@@ -8,6 +8,7 @@ from driver import *
 
 """ TEST CONSTANTS """
 
+HOST = 'http://84.201.138.2'
 USERNAME = 'Admin'
 PASSWORD = 'AdminAdmin'
 DATABASE = 'demo'  # PLEASE FILL IT WITH SOME DATA FOR TESTING
@@ -18,7 +19,7 @@ DATABASE = 'demo'  # PLEASE FILL IT WITH SOME DATA FOR TESTING
 def vadmin_without_auth():
     pytest.USERNAME = USERNAME
     pytest.PASSWORD = PASSWORD
-    yield VAdminAPI()
+    yield VAdminAPI(HOST)
 
 
 @pytest.fixture(scope='module')
@@ -26,6 +27,6 @@ def vadmin():
     pytest.USERNAME = USERNAME
     pytest.PASSWORD = PASSWORD
     pytest.DATABASE = DATABASE
-    obj = VAdminAPI()
+    obj = VAdminAPI(HOST)
     obj.auth_by_username(USERNAME, PASSWORD)
     yield obj
