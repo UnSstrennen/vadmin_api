@@ -16,7 +16,8 @@ pip3 install -r requirements.txt
 
 ```python
 vadmin_api_host = 'http://84.201.138.2'
-vadmin = VAdminAPI(vadmin_api_host)
+database_id = 'demo'
+vadmin = VAdminAPI(vadmin_api_host, database_id)
 ```
 
 ## Авторизация
@@ -30,15 +31,18 @@ vadmin.auth_by_token(token_type, access_token)  # by token
 
 ## Методы API
 
-##### `vadmin.get_load_plans(database_id)`
-Возвращает список всех [планов загрузки](#loadplan).
+##### `vadmin.get_load_plans(with_status=False)`
+Возвращает список всех [планов загрузки](#loadplan). Если установлен флаг `with_status`, то [планы загрузки](#loadplan) будут иметь атрибуты `status`, `progress` соответственно.
 
 ```
 [<LoadPlan name(1)>, <LoadPlan name(2)>]
 ```
 
-##### `vadmin.get_load_plan(database_id, load_plan_id, with_status=False)`
-Возвращает объект [плана загрузки](#loadplan). Если установлен флаг `with_status`, то [планы загрузки](#loadplan) будут иметь атрибуты `status`, `progress` соответственно.
+##### `vadmin.get_load_plan_by_id(load_plan_id)`
+Возвращает объект [плана загрузки](#loadplan) по его id. `**HTTPError(404)**`, если такого плана не существует.
+
+##### `vadmin.get_load_plan_by_name(load_plan_name)`
+Возвращает объект [плана загрузки](#loadplan) по его имени. `**ValueError**`, если такого плана не существует.
 
 ## <a name="loadplan"></a>Объект плана загрузки (`LoadPlan`)
 
@@ -57,13 +61,16 @@ plan = LoadPlan({
 Возвращает список шагов, включенных в программу плана загрузки.
 
 ##### `plan.get_status()`
-Возвращает статус выполнения плана загрузки.
+Возвращает статус выполнения плана загрузки. `**ResourceWarning**`, если план содержит ошибки.
 
 ##### `plan.get_progress()`
 Возвращает прогресс выполнения плана загрузки.
 
-##### `plan.start(with_prints=True)`
-Отправляет на сервер команду начала выполненеия плана загрузки. [`**BrokenPlanError**`](#errors), если план включает в себя ошибки, препятствующие выполнению плана. `**HTTPError**`, если API возвращает ошибку **400**. Если флаг `**with_prints**` установлен, функция ежесекундно выводит в терминал значение прогресса.
+##### `plan.execute(with_prints=True)`
+Отправляет на сервер команду начала выполненеия плана загрузки, ожидая завершение выполнения плана загрузки. [`**BrokenPlanError**`](#errors), если план включает в себя ошибки, препятствующие выполнению плана. `**HTTPError**`, если API возвращает ошибку **400**. Если флаг `**with_prints**` установлен, функция ежесекундно выводит в терминал значение прогресса.
+
+##### `plan.start()`
+Отправляет на сервер команду начала выполненеия плана загрузки. [`**BrokenPlanError**`](#errors), если план включает в себя ошибки, препятствующие выполнению плана.
 
 ##### `plan.stop()`
 Отправляет на сервер команду остановки выполнения плана загрузки.

@@ -19,7 +19,7 @@ DATABASE = 'demo'  # PLEASE FILL IT WITH SOME DATA FOR TESTING
 def vadmin_without_auth():
     pytest.USERNAME = USERNAME
     pytest.PASSWORD = PASSWORD
-    yield VAdminAPI(HOST)
+    yield VAdminAPI(HOST, DATABASE)
 
 
 @pytest.fixture(scope='module')
@@ -27,6 +27,6 @@ def vadmin():
     pytest.USERNAME = USERNAME
     pytest.PASSWORD = PASSWORD
     pytest.DATABASE = DATABASE
-    obj = VAdminAPI(HOST)
+    obj = VAdminAPI(HOST, DATABASE)
     obj.auth_by_username(USERNAME, PASSWORD)
     yield obj
